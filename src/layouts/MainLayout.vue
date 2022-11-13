@@ -15,9 +15,10 @@
           fit="contain"
           src="https://zoezi.se/api/utils/file/download?key=d6ddd852-80cd-4fa0-a582-74ab8965b5ab&size=400"
           style="height: 50px; width: 150px"
+          class="q-mr-sm"
         />
 
-        <q-toolbar-title shrink class="text-weight-bold"
+        <q-toolbar-title shrink class="text-weight-bold gt-sm"
           >Välkommen, Markus!</q-toolbar-title
         >
 
@@ -40,7 +41,7 @@
             outlined
             square
             v-model="search"
-            placeholder="Sök..."
+            placeholder="Sök kunder, aktiviteter, inställningar mm"
             class="bg-white col"
           />
           <q-btn
@@ -55,7 +56,7 @@
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn
+          <!-- <q-btn
             round
             dense
             flat
@@ -64,7 +65,7 @@
             v-if="$q.screen.gt.sm"
           >
             <q-tooltip>Create a video or post</q-tooltip>
-          </q-btn>
+          </q-btn> -->
           <q-btn
             round
             dense
@@ -116,6 +117,8 @@
             v-ripple
             clickable
             :to="link.to"
+            :exact="link.to == '/'"
+            active-class="active-menu-item"
           >
             <q-item-section avatar>
               <q-icon color="grey" :name="link.icon" />
@@ -133,6 +136,8 @@
             v-ripple
             clickable
             :to="link.to"
+            :exact="link.to == '/'"
+            active-class="active-menu-item"
           >
             <q-item-section avatar>
               <q-icon color="grey" :name="link.icon" />
@@ -228,16 +233,16 @@ export default {
       toggleLeftDrawer,
 
       links1: [
-        { icon: 'home', text: 'Min översikt' },
-        { icon: 'calendar_month', text: 'Schema' },
-        { icon: 'phone', text: 'Kunder' },
+        { icon: 'home', text: 'Min översikt', to: '/' },
+        { icon: 'calendar_month', text: 'Schema', to: '/schedule' },
+        { icon: 'phone', text: 'Kunder', to: '/customers' },
       ],
       links2: [
-        { icon: 'query_stats', text: 'Statistik' },
-        { icon: 'message', text: 'Meddelanden' },
-        { icon: 'point_of_sale', text: 'Kassa' },
-        { icon: 'payments', text: 'Ekonomi' },
-        { icon: 'settings', text: 'Inställningar' },
+        { icon: 'query_stats', text: 'Statistik', to: '/statistics' },
+        { icon: 'message', text: 'Meddelanden', to: '/messages' },
+        { icon: 'point_of_sale', text: 'Kassa', to: '/checkout' },
+        { icon: 'payments', text: 'Ekonomi', to: '/economy' },
+        { icon: 'settings', text: 'Inställningar', to: '/settings' },
       ],
       links3: [
         { icon: fabYoutube, text: 'YouTube Premium' },
