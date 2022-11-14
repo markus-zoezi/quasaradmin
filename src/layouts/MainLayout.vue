@@ -36,14 +36,58 @@
         <q-space />
 
         <div class="YL__toolbar-input-container row no-wrap">
-          <q-input
+          <q-select
+            :options="[]"
+            use-input
+            dense
+            outlined
+            square
+            placeholder="Sök kunder, aktiviteter, inställningar mm"
+            class="bg-white col"
+            @filter="doSearch"
+          >
+            <template #no-option v-if="searchResult.length">
+              <div class="q-pa-md">
+                <div v-for="section in searchResult" :key="section.title">
+                  <div class="text-weight-bold">{{ section.title }}</div>
+                  <q-list>
+                    <q-item
+                      v-for="item in section.results"
+                      :key="item.id"
+                      class="q-mb-sm"
+                      clickable
+                      v-ripple
+                    >
+                      <q-item-section avatar>
+                        <q-avatar>
+                          <img :src="item.image" />
+                        </q-avatar>
+                      </q-item-section>
+
+                      <q-item-section>
+                        <q-item-label>{{ item.title }}</q-item-label>
+                        <q-item-label caption lines="1">
+                          {{ item.subtitle }}</q-item-label
+                        >
+                      </q-item-section>
+
+                      <q-item-section side>
+                        <q-icon name="chat_bubble" color="grey" />
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </div>
+              </div>
+            </template>
+          </q-select>
+          <!--<q-input
             dense
             outlined
             square
             v-model="search"
             placeholder="Sök kunder, aktiviteter, inställningar mm"
             class="bg-white col"
-          />
+          /> -->
           <q-btn
             class="YL__toolbar-input-btn"
             color="grey-3"
@@ -224,7 +268,65 @@ export default {
       leftDrawerOpen.value = !leftDrawerOpen.value;
     }
 
+    const allData = {
+      sections: [
+        {
+          title: 'Kunder',
+          results: [
+            {
+              id: 17,
+              title: 'Markus Johansson',
+              subtitle: 'markus@zoezi.se',
+              image:
+                'https://zoezi.se/api/image/get?type=Staff&id=751&size=120',
+            },
+          ],
+        },
+        {
+          title: 'Kurser',
+          results: [
+            {
+              id: 17,
+              title: 'Yoga',
+              subtitle: '22:e december - 14:e mars',
+              image:
+                'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8eW9nQXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
+            },
+          ],
+        },
+      ],
+    };
+    const searchResult = ref([]);
+
+    function doSearch(what, done) {
+      what = what.toLowerCase();
+      let filterSection = function (section) {
+        return section.results.filter((x) => {
+          console.log('fitlering ' + x.title);
+          console.log('res: ' + x.title.toLowerCase().includes(what));
+          return x.title.toLowerCase().includes(what);
+        });
+      };
+
+      let res = [];
+      if (what) {
+        allData.sections.forEach((section) => {
+          let f = filterSection(section);
+          console.log('f length ' + f.length);
+          if (f.length) {
+            let s = Object.assign({}, section);
+            s.results = f;
+            res.push(s);
+          }
+        });
+      }
+      searchResult.value = res;
+      done();
+    }
+
     return {
+      doSearch,
+      searchResult,
       fabYoutube,
 
       leftDrawerOpen,
