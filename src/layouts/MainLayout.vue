@@ -57,10 +57,12 @@
                       class="q-mb-sm"
                       clickable
                       v-ripple
+                      @click="item.action"
                     >
                       <q-item-section avatar>
                         <q-avatar>
-                          <img :src="item.image" />
+                          <img :src="item.image" v-if="item.image" />
+                          <q-icon :name="item.icon" v-else-if="item.icon" />
                         </q-avatar>
                       </q-item-section>
 
@@ -71,8 +73,82 @@
                         >
                       </q-item-section>
 
-                      <q-item-section side>
+                      <!-- <q-item-section side>
                         <q-icon name="chat_bubble" color="grey" />
+                      </q-item-section> -->
+
+                      <q-item-section top side v-if="section.title == 'Kunder'">
+                        <div class="text-grey-8 q-gutter-xs">
+                          <q-btn
+                            class="gt-xs"
+                            size="12px"
+                            flat
+                            dense
+                            label="Boka"
+                            no-caps
+                          >
+                            <q-menu>
+                              <q-list style="min-width: 100px">
+                                <q-item clickable v-close-popup>
+                                  <q-item-section>Pass</q-item-section>
+                                </q-item>
+                                <q-item clickable v-close-popup>
+                                  <q-item-section>Massage</q-item-section>
+                                </q-item>
+                                <q-item clickable v-close-popup>
+                                  <q-item-section>Kurs</q-item-section>
+                                </q-item>
+                              </q-list>
+                            </q-menu>
+                          </q-btn>
+
+                          <q-btn
+                            size="12px"
+                            flat
+                            dense
+                            round
+                            icon="more_vert"
+                            v-if="section.title == 'Kunder'"
+                          >
+                            <q-menu>
+                              <q-list style="min-width: 100px">
+                                <template v-if="$q.screen.lt.md">
+                                  <q-item clickable v-close-popup>
+                                    <q-item-section>Boka Pass</q-item-section>
+                                  </q-item>
+                                  <q-item clickable v-close-popup>
+                                    <q-item-section
+                                      >Boka Massage</q-item-section
+                                    >
+                                  </q-item>
+                                  <q-item clickable v-close-popup>
+                                    <q-item-section>Boka Kurs</q-item-section>
+                                  </q-item>
+                                  <q-separator />
+                                </template>
+
+                                <q-item clickable v-close-popup>
+                                  <q-item-section
+                                    >Gå till kassan</q-item-section
+                                  >
+                                </q-item>
+                                <q-item clickable v-close-popup>
+                                  <q-item-section>Checka in</q-item-section>
+                                </q-item>
+                                <q-item clickable v-close-popup>
+                                  <q-item-section
+                                    >Ändra uppgifter</q-item-section
+                                  >
+                                </q-item>
+                                <q-item clickable v-close-popup>
+                                  <q-item-section
+                                    >Ändra arbetsschema</q-item-section
+                                  >
+                                </q-item>
+                              </q-list>
+                            </q-menu>
+                          </q-btn>
+                        </div>
                       </q-item-section>
                     </q-item>
                   </q-list>
@@ -256,11 +332,14 @@
 <script>
 import { ref } from 'vue';
 import { fabYoutube } from '@quasar/extras/fontawesome-v6';
+import { useQuasar } from 'quasar'
+import AddUser from '/components/AddUser.vue'
 
 export default {
   name: 'MyLayout',
 
   setup() {
+    const $q = useQuasar()
     const leftDrawerOpen = ref(false);
     const search = ref('');
 
@@ -268,17 +347,52 @@ export default {
       leftDrawerOpen.value = !leftDrawerOpen.value;
     }
 
+    function add() {
+      console.log('Add');
+      $q.dialog({
+        component: AddUser,
+
+        // props forwarded to your custom component
+        componentProps: {
+          text: 'something',
+          // ...more..props...
+        }
+      });
+    }
+
     const allData = {
       sections: [
+        {
+          title: 'Kommandon',
+          results: [
+            {
+              id: 17,
+              title: 'Lägg till ny kund',
+              icon: 'add',
+              action: add,
+            },
+            {
+              id: 18,
+              title: 'Skapa rapport',
+              icon: 'post_add',
+            },
+          ],
+        },
         {
           title: 'Kunder',
           results: [
             {
               id: 17,
               title: 'Markus Johansson',
-              subtitle: 'markus@zoezi.se',
+              subtitle: 'Kom för 15 minuter sedan',
               image:
                 'https://zoezi.se/api/image/get?type=Staff&id=751&size=120',
+            },
+            {
+              id: 18,
+              title: 'Mikael Håkansson',
+              subtitle: 'Senaste besök 15:e september',
+              image: 'https://zoezi.se/assets/img/mikael.jpg',
             },
           ],
         },
@@ -288,9 +402,32 @@ export default {
             {
               id: 17,
               title: 'Yoga',
-              subtitle: '22:e december - 14:e mars',
+              subtitle: '22:e december - 14:e mars (6 tillfällen)',
               image:
                 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8eW9nQXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
+            },
+            {
+              id: 18,
+              title: 'Fotboll för kids',
+              subtitle: '11:e januari - 15:e maj (18 tillfällen)',
+              image:
+                'https://images.unsplash.com/photo-1551958219-acbc608c6377?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+            },
+          ],
+        },
+        {
+          title: 'Inställningar',
+          results: [
+            {
+              id: 17,
+              title: 'Autogiro',
+              subtitle: 'Inställningar som rör betalningar med Autogiro',
+              image: 'https://master.zoezi.se/assets/img/bgc.ico',
+            },
+            {
+              id: 17,
+              title: 'Betalsätt',
+              image: 'https://master.zoezi.se/assets/img/bank.jpg',
             },
           ],
         },
