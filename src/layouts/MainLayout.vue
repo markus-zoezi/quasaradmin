@@ -49,7 +49,9 @@
             <template #no-option v-if="searchResult.length">
               <div class="q-pa-md">
                 <div v-for="section in searchResult" :key="section.title">
-                  <div class="text-weight-bold">{{ section.title }}</div>
+                  <div class="text-weight-bold text-grey-8">
+                    {{ section.title }}
+                  </div>
                   <q-list>
                     <q-item
                       v-for="item in section.results"
@@ -332,14 +334,14 @@
 <script>
 import { ref } from 'vue';
 import { fabYoutube } from '@quasar/extras/fontawesome-v6';
-import { useQuasar } from 'quasar'
-import AddUser from '/components/AddUser.vue'
+import { useQuasar } from 'quasar';
+import AddUser from 'components/AddUser.vue';
 
 export default {
   name: 'MyLayout',
 
   setup() {
-    const $q = useQuasar()
+    const $q = useQuasar();
     const leftDrawerOpen = ref(false);
     const search = ref('');
 
@@ -350,13 +352,17 @@ export default {
     function add() {
       console.log('Add');
       $q.dialog({
+        title: 'Confirm',
+        message: 'Would you like to turn on the wifi?',
+        cancel: true,
+        persistent: true,
         component: AddUser,
-
+        /*
         // props forwarded to your custom component
         componentProps: {
           text: 'something',
           // ...more..props...
-        }
+        },*/
       });
     }
 
@@ -462,6 +468,8 @@ export default {
     }
 
     return {
+      AddUser,
+      $q,
       doSearch,
       searchResult,
       fabYoutube,
