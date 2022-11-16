@@ -15,6 +15,7 @@ const routes = [
       { path: 'checkout', component: () => import('pages/CheckoutPage.vue') },
       { path: 'messages', component: () => import('pages/MessagesPage.vue') },
       { path: 'settings', component: () => import('pages/SettingsPage.vue') },
+      { path: 'login', component: () => import('pages/LoginPage.vue') },
     ],
   },
 

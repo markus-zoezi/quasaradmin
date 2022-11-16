@@ -212,7 +212,7 @@
             <q-badge color="red" text-color="white" floating> 2 </q-badge>
             <q-tooltip>Notifications</q-tooltip>
           </q-btn>
-          <q-btn round color="primary">
+          <q-btn round color="primary" to="/login">
             <q-avatar size="36px">
               <img
                 src="https://zoezi.se/api/image/get?type=Staff&id=751&size=120"
